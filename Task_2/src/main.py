@@ -89,3 +89,46 @@ def generate_mermaid_graph(commits, dependencies):
             graph.append(f"    {dep_node_id} --> {node_id}")
 
     return "\n".join(graph)
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Инструмент для построения графа зависимостей коммитов.")
+    parser.add_argument("--graph-tool-path", required=True, help="Путь к программе для визуализации графов.")
+    parser.add_argument("--repo-path", required=True, help="Путь к анализируемому репозиторию.")
+    parser.add_argument("--output-path", required=True, help="Путь к файлу-результату в виде кода.")
+    parser.add_argument("--since-date", required=True, help="Дата, начиная с которой анализируются коммиты (в формате YYYY-MM-DD).")
+
+    args = parser.parse_args()
+
+    try:
+        datetime.strptime(args.since_date, "%Y-%m-%d")
+    except ValueError:
+        raise ValueError("Неверный формат даты. Используйте YYYY-MM-DD.")
+
+    if not os.path.isdir(args.repo_path):
+        raise FileNotFoundError(f"Репозиторий не найден по пути: {args.repo_path}")
+
+    commits = get_git_commits(args.repo_path, args.since_date)
+
+    if not commits:
+        print("Нет коммитов для указанной даты.")
+        return
+
+    # Поиск зависимостей
+    direct_dependencies = find_dependencies(commits)
+    non_transitive_dependencies = resolve_transitive_dependencies(direct_dependencies)
+
+    # Генерация графа
+    mermaid_graph = generate_mermaid_graph(commits, non_transitive_dependencies)
+
+    # Запись в файл
+    with open(args.output_path, "w", encoding="utf-8") as output_file:
+        output_file.write(mermaid_graph)
+
+    # Вывод на экран в виде кода
+    print("Сгенерированный Mermaid-граф:")
+    print(mermaid_graph)
+
+
+if __name__ == "__main__":
+    main()

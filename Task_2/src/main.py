@@ -39,3 +39,35 @@ def get_git_commits(repo_path, since_date):
 
     return list(reversed(commits))
 
+
+def find_dependencies(commits):
+    """
+    Определяет зависимости между коммитами на основе измененных файлов.
+    """
+    dependencies = defaultdict(list)
+
+    for i, current_commit in enumerate(commits):
+        for j in range(i):
+            previous_commit = commits[j]
+            # Если коммиты изменяют одинаковые файлы, создаем зависимость
+            if not current_commit["files"].isdisjoint(previous_commit["files"]):
+                dependencies[i].append(j)
+
+    return dependencies
+
+
+def resolve_transitive_dependencies(direct_dependencies):
+    """
+    Убирает транзитивные зависимости, оставляя только прямые.
+    """
+    reduced_dependencies = defaultdict(list)
+
+    for node, deps in direct_dependencies.items():
+        # Для каждого узла проверяем, какие зависимости не являются транзитивными
+        non_transitive_deps = set(deps)
+        for dep in deps:
+            non_transitive_deps -= set(direct_dependencies.get(dep, []))  # Убираем транзитивные зависимости
+        reduced_dependencies[node] = list(non_transitive_deps)
+
+    return reduced_dependencies
+

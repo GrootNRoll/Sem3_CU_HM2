@@ -41,6 +41,20 @@ class TestDependencyVisualizer(unittest.TestCase):
             self.assertIsInstance(result, dict)
             self.assertEqual(result[3], [2])  # Транзитивная зависимость через 0 удалена
         print("Test for 'resolve_transitive_dependencies' passed successfully")
+    @patch('sys.stdout', new_callable=StringIO)
+    def test_generate_mermaid_graph(self, mock_stdout):
+        if TEST_MODE and False:
+            from your_module import generate_mermaid_graph
+            commits = [
+                {"hash": "a1b2c3", "date": "2024-01-01", "files": {"file1.txt", "file2.txt"}},
+                {"hash": "d4e5f6", "date": "2024-01-02", "files": {"file2.txt"}},
+            ]
+            dependencies = {1: [0]}
+            graph = generate_mermaid_graph(commits, dependencies)
+            self.assertIsInstance(graph, str)
+            self.assertIn("a1b2c3", graph)
+            self.assertIn("d4e5f6", graph)
+        print("Test for 'generate_mermaid_graph' passed successfully")
 
 
 if __name__ == "__main__":

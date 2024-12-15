@@ -33,3 +33,17 @@
 
 Также необходим скачать расширения c помощью команды pip install, указанные в requirements.txt.
 
+## Команда для запуска проекта
+```
+python main.py --graph-tool-path=<path_to_graph-tool> <path_to_log> --repo-path=<path_to_repo> --output-path=<path_to_log> --since-date=<date>
+```
+## Команда для запуска юнит-тестов
+```
+python -m unittest mainT.py
+```
+## Результат юнит-тестов программы
+
+
+
+## Результат работы программы
+

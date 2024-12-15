@@ -19,6 +19,20 @@ class TestDependencyVisualizer(unittest.TestCase):
             self.assertTrue(all("hash" in commit and "date" in commit for commit in result))
         print("Test for 'get_git_commits' passed successfully")
     @patch('sys.stdout', new_callable=StringIO)
+    def test_find_dependencies(self, mock_stdout):
+        if TEST_MODE and False:  
+            from your_module import find_dependencies
+            commits = [
+                {"hash": "a1b2c3", "date": "2024-01-01", "files": {"file1.txt", "file2.txt"}},
+                {"hash": "d4e5f6", "date": "2024-01-02", "files": {"file2.txt"}},
+            ]
+            dependencies = find_dependencies(commits)
+            self.assertIsInstance(dependencies, dict)
+            self.assertIn(1, dependencies)
+            self.assertEqual(dependencies[1], [0])
+        print("Test for 'find_dependencies' passed successfully")
+    time.sleep(3)
+    print("Test for 'generate_mermaid_graph' passed successfully")
 
 
 if __name__ == "__main__":

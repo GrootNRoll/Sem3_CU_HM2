@@ -42,8 +42,10 @@ python main.py --graph-tool-path=<path_to_graph-tool> <path_to_log> --repo-path=
 python -m unittest mainT.py
 ```
 ## Результат юнит-тестов программы
+![image](https://github.com/user-attachments/assets/b2553af8-938f-444a-8bb6-c5c122b65321)
 
 
 
 ## Результат работы программы
+![image](https://github.com/user-attachments/assets/5e94e4b3-573c-44cb-88fd-db4405d14a62)
 

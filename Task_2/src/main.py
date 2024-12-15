@@ -71,3 +71,21 @@ def resolve_transitive_dependencies(direct_dependencies):
 
     return reduced_dependencies
 
+
+def generate_mermaid_graph(commits, dependencies):
+    """
+    Генерирует граф Mermaid с учетом транзитивных зависимостей.
+    """
+    graph = ["graph TD"]
+
+    for i, commit in enumerate(commits):
+        node_id = f"commit_{i}"
+        file_list = "<br>".join(commit["files"]) if commit["files"] else "No changes"
+        graph.append(f"    {node_id}[\"{commit['hash']}<br>{commit['date']}<br>{file_list}\"]")
+
+        # Добавляем зависимости
+        for dep in dependencies.get(i, []):
+            dep_node_id = f"commit_{dep}"
+            graph.append(f"    {dep_node_id} --> {node_id}")
+
+    return "\n".join(graph)

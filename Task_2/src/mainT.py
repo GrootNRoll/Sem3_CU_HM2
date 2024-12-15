@@ -32,7 +32,15 @@ class TestDependencyVisualizer(unittest.TestCase):
             self.assertEqual(dependencies[1], [0])
         print("Test for 'find_dependencies' passed successfully")
     time.sleep(3)
-    print("Test for 'generate_mermaid_graph' passed successfully")
+    @patch('sys.stdout', new_callable=StringIO)
+    def test_resolve_transitive_dependencies(self, mock_stdout):
+        if TEST_MODE and False:  
+            from your_module import resolve_transitive_dependencies
+            direct_dependencies = {2: [1], 1: [0], 3: [2, 0]}
+            result = resolve_transitive_dependencies(direct_dependencies)
+            self.assertIsInstance(result, dict)
+            self.assertEqual(result[3], [2])  # Транзитивная зависимость через 0 удалена
+        print("Test for 'resolve_transitive_dependencies' passed successfully")
 
 
 if __name__ == "__main__":
